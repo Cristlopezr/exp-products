@@ -38,12 +38,40 @@ const columns = [
     header: () => <Text>Vence en</Text>,
   }),
   columHelper.accessor("openDate", {
-    cell: (info) => <Text>{new Date(info.getValue()).toLocaleString("es-CL")}</Text>,
+    cell: (info) => (
+      <Text>
+        {new Intl.DateTimeFormat(undefined, {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          minute: "2-digit",
+          hour: "2-digit",
+          hour12: false,
+          second: "2-digit",
+        })
+          .format(info.getValue())
+          .replace(/\//g, "-")}
+      </Text>
+    ),
     header: () => <Text>Abierto</Text>,
     sortingFn: "datetime",
   }),
   columHelper.accessor("expireDateAfterOpen", {
-    cell: (info) => <Text>{new Date(info.getValue()).toLocaleString("es-CL")}</Text>,
+    cell: (info) => (
+      <Text>
+        {new Intl.DateTimeFormat(undefined, {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          minute: "2-digit",
+          hour: "2-digit",
+          hour12: false,
+          second: "2-digit",
+        })
+          .format(info.getValue())
+          .replace(/\//g, "-")}
+      </Text>
+    ),
     header: () => <Text>Vence</Text>,
     sortingFn: "datetime",
   }),

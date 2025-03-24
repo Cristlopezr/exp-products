@@ -7,7 +7,7 @@ export class ProductMapper {
       brand: productResponse.barcodeInfo.brand.name ?? "Sin marca",
       id: productResponse.id,
       expireDateAfterOpen: new Date(productResponse.expireDateAfterOpen),
-      isExpired: ProductMapper.calculateDaysToExpire(productResponse.expireDateAfterOpen) < 0 ? "Vencido" : "Bueno",
+      isExpired: productResponse.isExpired ? "Vencido" : "Bueno",
       name: productResponse.barcodeInfo.name,
       openDate: new Date(productResponse.openDate),
       quantity: productResponse.barcodeInfo.quantity,
@@ -16,10 +16,19 @@ export class ProductMapper {
   }
 
   private static calculateDaysToExpire(expireDate: string) {
-    const difference = new Date(expireDate).getTime() - new Date().getTime();
+    const now = new Date();
 
-    const days = Math.round(difference / (1000 * 60 * 60 * 24));
+    const timeOffset = now.getTimezoneOffset() / 60;
 
-    return days;
+    now.setHours(now.getHours() - timeOffset);
+
+    const expire = new Date(expireDate);
+
+    expire.setHours(expire.getHours() - timeOffset);
+
+    const difference = expire.getTime() - now.getTime();
+
+    //Days Left
+    return Math.round(difference / (1000 * 60 * 60 * 24));
   }
 }
