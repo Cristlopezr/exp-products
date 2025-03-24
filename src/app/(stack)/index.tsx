@@ -31,9 +31,15 @@ const columns = [
   columHelper.accessor("daysToExpire", {
     cell: (info) => {
       if (info.getValue() < 0) return "No aplica";
-      if (info.getValue() === 0) return "Hoy";
-      if (info.getValue() === 1) return "Mañana";
-      return `${info.getValue()} días`;
+      if (info.getValue() === 0) return "Ahora";
+
+      const minutes = info.getValue();
+      const hours = Math.floor(minutes / 60);
+      const days = Math.floor(hours / 24);
+
+      if (days >= 1) return `${days} día${days > 1 ? "s" : ""}`;
+      if (hours >= 1) return `${hours} hora${hours > 1 ? "s" : ""}`;
+      return `${info.getValue()} minuto${info.getValue() > 1 ? "s" : ""}`;
     },
     header: () => <Text>Vence en</Text>,
   }),
